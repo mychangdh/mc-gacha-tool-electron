@@ -45,8 +45,9 @@ function createWindow() {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
   correspondence(win)
+  win.webContents.openDevTools({ mode: "undocked" })
   if (VITE_DEV_SERVER_URL) {
-    win.webContents.openDevTools({ mode: "undocked" })
+
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
     // win.loadFile('dist/index.html')
