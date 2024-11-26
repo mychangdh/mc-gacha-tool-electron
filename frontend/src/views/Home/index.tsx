@@ -1,25 +1,34 @@
 import { useEffect, useState } from "react";
-import { ipc, Renderer } from "@/utils/ipcRender";
-import { message } from 'antd'
+import { ipc } from "@/utils/ipcRender";
+import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [appList, setAppList] = useState<any[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const navgiate = useNavigate()
-  useEffect(() => {
-    Renderer.ipcRenderer.invoke("getGachaByType").then(async (res: any) => {
-      if (res.code === 1) {
-        navgiate("/find-mc",{replace:false})
-        return
-      }
-      if (res.code === 2) {
-        return messageApi.error(res.message)
-      }
-      setAppList(res.data);
-    });
-  }, []);
+  const navgiate = useNavigate();
+  async function findMc() {
+    const res = await ipc.invoke("getUidUrl");
 
+    if (res.code === 1) {
+      navgiate("/find-mc", { replace: false });
+      return;
+    }
+    if (res.code === 2) {
+      return messageApi.error(res.data);
+    }
+    if (res.code === 100000) {
+      const data = await ipc.invoke("getOldAllGachaByType");
+      const urls = await ipc.invoke("getUrlList");
+      console.log(data,urls);
+      
+    }
+  }
+
+  
+  useEffect(() => {
+    findMc();
+  }, []);
 
   return (
     <>
