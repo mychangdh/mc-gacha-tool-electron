@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Renderer } from "@/utils/ipcRender";
+import { ipc, Renderer } from "@/utils/ipcRender";
 import { message } from 'antd'
 import { useNavigate } from "react-router-dom";
 export default function Home() {
@@ -8,7 +8,6 @@ export default function Home() {
   const [messageApi, contextHolder] = message.useMessage();
   const navgiate = useNavigate()
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Renderer.ipcRenderer.invoke("getGachaByType").then(async (res: any) => {
       if (res.code === 1) {
         navgiate("/find-mc",{replace:false})

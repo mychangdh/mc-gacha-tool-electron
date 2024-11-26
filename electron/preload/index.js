@@ -12,5 +12,6 @@ module.exports = async () => {
   Addon.get('tray').create();
   Addon.get('security').create();
   Addon.get('getGachaByType').create();
+  Addon.get('openFilesDialog').create();
 
 }

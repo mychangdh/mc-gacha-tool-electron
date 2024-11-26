@@ -18,22 +18,57 @@ const getSearchParams = (url) => {
         }
     }, {})
 }
+
+function setMcPath(url){
+    const dir = './userData'
+    if (fs.existsSync(dir)) fs.mkdirSync(dir);
+    fs.writeFileSync(path.join(dir, 'InstallPath'), url)
+    return 
+}
+function readMcPath(){
+    const dir = './userData'
+    if (fs.existsSync(dir)) fs.mkdirSync(dir);
+    fs.writeFileSync(path.join(dir, 'InstallPath'), url)
+    return 
+}
 async function getMcPostion() {
+    const dir = './userData'
+    if (fs.existsSync(path.join(dir, 'InstallPath'))) return
     const data = await getInstalledApps()
     const mc = data.find(item => item.appName.includes("鸣潮"))
     if (!mc) return null
+    setMcPath(mc.InstallPath)
     return mc.InstallPath
 }
+
 function create() {
+
     ipcMain.handle("getMcPostion", getMcPostion)
     /** 参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
     ipcMain.handle("getGachaByType", async (e, cardPoolType = 1) => {
-        const mcInitPath = await getMcPostion()
+        await getMcPostion()
+        const dir = './userData/InstallPath'
+        if (!fs.existsSync(dir)) return {
+            code: 1,
+            message: "未找到文件路径"
+        }
+        const mcInitPath = fs.readFileSync(path.join(dir, 'InstallPath'), 'utf-8')
+        // const mcInitPath = await getMcPostion()
         if (!mcInitPath) return {
             code: 1,
             message: "未找到文件路径"
         }
-        const mcPath = path.resolve(mcInitPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
+
+        let mcPath
+        try {
+            mcPath = path.resolve(mcInitPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
+        }
+        catch {
+            return {
+                code: 1,
+                message: "未找到文件路径"
+            }
+        }
         const text = fs.readFileSync(mcPath, "utf-8")
         const mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
         const mcParams = getSearchParams(mcurl)
