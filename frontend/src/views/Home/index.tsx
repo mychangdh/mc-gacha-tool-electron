@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+// import { useState } from "react";
 import { ipc } from "@/utils/ipcRender";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 export default function Home() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [appList, setAppList] = useState<any[]>([]);
+  // const [appList, setAppList] = useState<any[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const navgiate = useNavigate();
   async function findMc() {
