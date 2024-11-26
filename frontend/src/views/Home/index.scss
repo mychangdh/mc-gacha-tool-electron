@@ -1,0 +1,12 @@
+.form {
+    .btn {
+        width: 120px;
+        margin-right: 10px;
+        &:hover {
+            background-color: #409eff !important;
+            color: #fff !important;
+        }
+    }
+    .up-btn {
+    }
+}

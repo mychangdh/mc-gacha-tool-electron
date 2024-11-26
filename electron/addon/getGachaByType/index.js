@@ -91,7 +91,7 @@ function setUidList(uid) {
     }
     catch (err) {
         console.log(err);
-        
+
         return false
     }
 }
@@ -129,14 +129,14 @@ const getMcData = async (cardPoolType = 1) => {
         }
         catch (err) { }
     }
-    else resData = res.data.data
-    writeData(String(mcParams.player_id), cardPoolType, JSON.stringify(resData))
+    else resData = mergeData([], res.data.data)
 
+    writeData(String(mcParams.player_id), cardPoolType, JSON.stringify(resData))
 
     return {
         code: 100000,
         playerId: mcParams.player_id,
-        data: res.data.data
+        data: resData
     }
 }
 
@@ -161,8 +161,14 @@ function create() {
             if (res.code === 100000) {
                 data[`cardType_${i}`] = res.data
             }
+            else {
+                return res
+            }
         }
-        return data
+        return {
+            code: 100000,
+            data
+        }
     })
     ipcMain.handle("getOldAllGachaByType", async () => {
         const urlList = await getUidUrl()

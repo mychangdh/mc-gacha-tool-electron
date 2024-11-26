@@ -36,13 +36,10 @@
     "build-lp-64": "electron-builder --config=./electron/config/builder.json -l=pacman --x64",
     "test": "set DEBUG=* && electron . --env=local"
   },
-  "repository": "https://github.com/dromara/electron-egg.git",
   "keywords": [
-    "Electron",
-    "electron-egg",
-    "ElectronEgg"
+    "Electron"
   ],
-  "author": "哆啦好梦, Inc <530353222@qq.com>",
+  "author": "常东辉, Inc <1392238525@qq.com>",
   "license": "Apache",
   "devDependencies": {
     "@electron/rebuild": "^3.2.13",
