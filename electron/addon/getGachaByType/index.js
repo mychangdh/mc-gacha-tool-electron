@@ -29,7 +29,10 @@ function create() {
     /** 参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
     ipcMain.handle("getGachaByType", async (e, cardPoolType = 1) => {
         const mcInitPath = await getMcPostion()
-        if (!mcInitPath) return
+        if (!mcInitPath) return {
+            code: 1,
+            message: "未找到文件路径"
+        }
         const mcPath = path.resolve(mcInitPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
         const text = fs.readFileSync(mcPath, "utf-8")
         const mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
@@ -50,7 +53,10 @@ function create() {
                 "Content-Type": "application/json;text/plain;*/*"
             }
         })
-
+        if (res.code != '0') return {
+            code: 2,
+            message: "网络错误或链接已过期"
+        }
         fs.writeFileSync(path.join(__dirname, './data.json'), JSON.stringify(res.data), 'utf-8')
 
         return res.data
