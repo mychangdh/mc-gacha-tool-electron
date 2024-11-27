@@ -1,4 +1,4 @@
-const { dialog, ipcMain } = require('electron');
+const { dialog, ipcMain, shell } = require('electron');
 async function create() {
 
     ipcMain.handle("openFilesDialog", async () => {
@@ -12,6 +12,10 @@ async function create() {
                 properties: ["openDirectory"],
                 buttonLabel: '选择'
             });
+        return result
+    })
+    ipcMain.handle("openFile", async (e, path) => {
+        const result = await shell.openPath(path)
         return result
     })
 

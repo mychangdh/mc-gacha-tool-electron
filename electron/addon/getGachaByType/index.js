@@ -8,6 +8,7 @@ const { writeData } = require("./writeData")
 const { readData } = require("./readData")
 const { mergeData } = require("./mergeData")
 const { forEach } = require("lodash")
+const { exportGachaData } = require("./exportGachaData")
 const getSearchParams = (url) => {
     // 获取查询参数前的 ? 对应的索引位置
     const searchIndex = url.indexOf('?')
@@ -154,12 +155,13 @@ function create() {
     ipcMain.handle("getUrlList", () => {
         return getUidList()
     })
+    ipcMain.handle("exportGachaData", exportGachaData)
     ipcMain.handle("updateAllGachaByType", async () => {
         const data = {}
         for (let i = 1; i <= 5; i++) {
             const res = await getMcData(i)
             if (res.code === 100000) {
-                data[`cardType_${i}`] = res.data
+                data[`CardType_${i}`] = res.data
             }
             else {
                 return res
@@ -181,11 +183,11 @@ function create() {
         for (let i = 1; i <= 5; i++) {
             const file = readData(uid, i)
             try {
-                if (file) data[`cardType_${i}`] = JSON.parse(file)
-                else data[`cardType_${i}`] = []
+                if (file) data[`CardType_${i}`] = JSON.parse(file)
+                else data[`CardType_${i}`] = []
             }
             catch (err) {
-                data[`cardType_${i}`] = []
+                data[`CardType_${i}`] = []
             }
         }
         return data

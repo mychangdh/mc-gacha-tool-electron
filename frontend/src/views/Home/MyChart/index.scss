@@ -1,15 +1,47 @@
-.cramp {
-    font-size: 14px;
-
-    .cramp-item {
-        font-weight: 700;
-
-        .name {
-            margin-right: 5px;
+.MyChart{
+    width: 250px;
+    margin: 10px;
+    .cramp {
+        font-size: 12px;
+        text-align: left;
+        margin-top: 10px;
+        .cramp-item {
+            white-space: nowrap;
+           
+            .count {
+                margin-right: 7px;
+            }
+        }
+        .history-text {
+            color: #626d72;
+        }
+        .total {
+            color: #2563eb;
+            margin: 0 5px;
+        }
+        .no-card-num {
+            color: #16a34a;
+            margin: 0 5px;
+        }
+        .average {
+            display: flex;
+            .length {
+                width: 30px;
+            }
         }
     }
-}
-.echarts-item{
-    width: 300px;
-    margin: 10px;
+    .title {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+  
+    .message {
+        width: 200px;
+        font-size: 12px;
+        .date {
+            color: #6b7280;
+        }
+    }
+    
 }

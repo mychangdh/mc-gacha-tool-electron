@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 // import { useState } from "react";
 import { ipc } from "@/utils/ipcRender";
-import { SelectOutlined, SettingOutlined, SyncOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
+import {
+  SelectOutlined,
+  SettingOutlined,
+  SyncOutlined,
+  VerticalAlignTopOutlined,
+} from "@ant-design/icons";
 import { Button, Form, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./index.scss";
@@ -14,7 +19,6 @@ export default function Home() {
   const [uid, setUid] = useState<string>("");
   // 效验路径
   async function efficacyMcPath() {
-
     const res = await ipc.invoke("getUidParams");
     if (res.code === 1) {
       // navgiate("/find-mc", { replace: false });
@@ -39,7 +43,13 @@ export default function Home() {
   function onUidChange(selectUid: string) {
     setUid(selectUid);
   }
-  async function upDataGachaData() {
+  async function exportGachaData() {
+    const res = await ipc.invoke("exportGachaData", gachaData);
+    if (res.code === 100000) {
+      message.success(`导出成功，路径为${res.path}`, 3000);
+    }
+  }
+  async function upDateGachaData() {
     const res = await ipc.invoke("updateAllGachaByType");
     if (res.code !== 100000) {
       message.error(res.data);
@@ -49,7 +59,7 @@ export default function Home() {
     message.success("更新成功！");
   }
   useEffect(() => {
-    getLocalData()
+    getLocalData();
     efficacyMcPath();
   }, []);
   return (
@@ -70,7 +80,7 @@ export default function Home() {
         <Form.Item label={null}>
           <Button
             className="btn"
-            onClick={upDataGachaData}
+            onClick={upDateGachaData}
             icon={<SyncOutlined />}
             type="default"
           >
@@ -79,7 +89,7 @@ export default function Home() {
         </Form.Item>
         <Form.Item label={null}>
           <Button
-            onClick={upDataGachaData}
+            onClick={exportGachaData}
             icon={<VerticalAlignTopOutlined />}
             type="primary"
           >
@@ -98,9 +108,13 @@ export default function Home() {
         </Form.Item>
       </Form>
       <div className="echarts">
-        {gachaData.map((item, index: any) => (
-          item.length ? <MyEchart key={index} type={index + 1} data={item}></MyEchart> : <span key={index}></span>
-        ))}
+        {gachaData.map((item, index: any) =>
+          item.length ? (
+            <MyEchart key={index} type={index + 1} data={item}></MyEchart>
+          ) : (
+            <span key={index}></span>
+          )
+        )}
       </div>
     </>
   );

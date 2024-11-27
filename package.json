@@ -55,10 +55,11 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
-    "dayjs": "^1.10.7",
+    "dayjs": "^1.11.13",
     "ee-core": "2.11.0",
     "electron-updater": "^5.3.0",
     "get-installed-apps": "^1.1.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "node-xlsx": "^0.24.0"
   }
 }

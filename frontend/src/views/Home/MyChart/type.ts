@@ -7,7 +7,7 @@ export const CARTTYPR = {
     4: "武器调谐（常驻池）",
     5: "角色调谐（新手池）",
 } as const
-export type cardType =
+export type CardType =
     {
         cardPoolType: string,
         resourceId: number,
@@ -17,10 +17,10 @@ export type cardType =
         count: number,
         time: string
     }
-export type GoldObjType = { [key in "gold" | "purple" | "blue"]: cardType[] }
-export const goldDict = {
+export type GoldObjType = { [key in "gold" | "purple" | "blue"]: CardType[] }
+export const goldDict :any = {
     gold: "5星",
     purple: "4星",
     blue: "3星",
-} as const
-export const colorList = getColor("#7FFF00", "#363636", 80)
+} 
+export const colorList = getColor("#fffb0d", "#a43f2c", 81)
