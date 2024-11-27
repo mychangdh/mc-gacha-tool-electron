@@ -27,18 +27,17 @@ function setCount(result) {
  * @param {Array} data 
  */
 function mergeData(oldData, data) {
-    if (!oldData.length) return setCount(data) 
-    if (!data.length) return setCount(oldData) 
+    if (!oldData.length) return setCount(data)
+    if (!data.length) return setCount(oldData)
     const latestData = oldData[0]
     if (getDataNum(data[0].time) < getDataNum(data[data.length - 1].time)) data.reverse()
-    let i = (data.length - 1)
-    for (; i >= 0; i--) {
+    let i = 0
+    for (; i < data.length; i++) {
         if (diffData(latestData, data[i])) {
             break
         }
     }
-
-    let result = [...data.slice(data.length - i), ...oldData]
+    let result = [...data.slice(0, i), ...oldData]
 
     return setCount(result)
 }

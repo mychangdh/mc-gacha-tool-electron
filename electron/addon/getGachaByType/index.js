@@ -39,17 +39,17 @@ async function getMcPostion() {
     return
 }
 /** 参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
-async function getUidUrl() {
+async function getUidParams() {
     await getMcPostion()
     if (!fs.existsSync(USER_DATA_PATH)) return {
         code: 1,
-        data: "未找到文件路径"
+        data: "安装路径错误，请手动选择安装路径"
     }
     const mcInitPath = fs.readFileSync(path.join(USER_DATA_PATH, 'InstallPath'), 'utf-8')
     // const mcInitPath = await getMcPostion()
     if (!mcInitPath) return {
         code: 1,
-        data: "未找到文件路径"
+        data: "安装路径错误，请手动选择安装路径"
     }
 
     let mcPath = path.resolve(mcInitPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
@@ -60,7 +60,7 @@ async function getUidUrl() {
     catch {
         return {
             code: 1,
-            data: "未找到文件路径"
+            data: "安装路径错误，请手动选择安装路径"
         }
     }
     const mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
@@ -78,6 +78,7 @@ function getUidList() {
         return JSON.parse(fs.readFileSync(uidPath, "utf-8"))
     }
     catch (err) {
+        console.log(err);
         return []
     }
 }
@@ -91,12 +92,11 @@ function setUidList(uid) {
     }
     catch (err) {
         console.log(err);
-
         return false
     }
 }
 const getMcData = async (cardPoolType = 1) => {
-    const urlList = await getUidUrl()
+    const urlList = await getUidParams()
     if (urlList.code !== 100000) return urlList
     const mcParams = urlList.params
     const res = await axios({
@@ -148,10 +148,10 @@ function create() {
         setMcPath(path)
     })
 
-    ipcMain.handle("getUidUrl", (e, card) => {
-        return getUidUrl()
+    ipcMain.handle("getUidParams", () => {
+        return getUidParams()
     })
-    ipcMain.handle("getUrlList", (e, card) => {
+    ipcMain.handle("getUrlList", () => {
         return getUidList()
     })
     ipcMain.handle("updateAllGachaByType", async () => {
@@ -171,8 +171,12 @@ function create() {
         }
     })
     ipcMain.handle("getOldAllGachaByType", async () => {
-        const urlList = await getUidUrl()
-        const uid = urlList.params.player_id
+        const urlList = await getUidParams()
+        const uid = urlList?.params?.player_id || getUidList()[0]
+        if (!uid) return {
+            code: 1,
+            data: "安装路径错误，请手动选择安装路径"
+        }
         const data = {}
         for (let i = 1; i <= 5; i++) {
             const file = readData(uid, i)

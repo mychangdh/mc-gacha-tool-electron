@@ -1,12 +1,24 @@
 .form {
     .btn {
         width: 120px;
-        margin-right: 10px;
+
         &:hover {
             background-color: #409eff !important;
             color: #fff !important;
         }
     }
-    .up-btn {
+
+    .ant-form-item {
+        margin-inline-end: 5px;
     }
+
+    .select-file-btn {
+        margin-left: calc(100% - 674px);
+    }
+}
+.echarts{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }

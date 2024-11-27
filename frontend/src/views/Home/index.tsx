@@ -1,36 +1,41 @@
 import { useEffect, useState } from "react";
 // import { useState } from "react";
 import { ipc } from "@/utils/ipcRender";
-import { SyncOutlined } from "@ant-design/icons";
+import { SelectOutlined, SettingOutlined, SyncOutlined, VerticalAlignTopOutlined } from "@ant-design/icons";
 import { Button, Form, Select, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./index.scss";
-import MyEchart from "./MyEchart";
+import MyEchart from "./MyChart";
 export default function Home() {
   const [messageApi, contextHolder] = message.useMessage();
   const navgiate = useNavigate();
   const [gachaData, setGachaData] = useState<any[]>([]);
   const [uidList, setUidList] = useState([]);
   const [uid, setUid] = useState<string>("");
-  async function findMc() {
-    const res = await ipc.invoke("getUidUrl");
+  // 效验路径
+  async function efficacyMcPath() {
 
+    const res = await ipc.invoke("getUidParams");
     if (res.code === 1) {
-      navgiate("/find-mc", { replace: false });
-      return;
+      // navgiate("/find-mc", { replace: false });
+      return messageApi.error(res.data);
     }
     if (res.code === 2) {
       return messageApi.error(res.data);
     }
     if (res.code === 100000) {
-      const data = await ipc.invoke("getOldAllGachaByType");
-      const urls = await ipc.invoke("getUrlList");
-      
-      setGachaData(Object.values(data));
-      setUidList(urls);
-      if (urls.length) setUid(urls[0]);
     }
   }
+
+  /*尝试得到本地数据 */
+  async function getLocalData() {
+    const urls = await ipc.invoke("getUrlList");
+    setUidList(urls);
+    if (urls.length) setUid(urls[0]);
+    const data = await ipc.invoke("getOldAllGachaByType");
+    setGachaData(Object.values(data));
+  }
+
   function onUidChange(selectUid: string) {
     setUid(selectUid);
   }
@@ -44,7 +49,8 @@ export default function Home() {
     message.success("更新成功！");
   }
   useEffect(() => {
-    findMc();
+    getLocalData()
+    efficacyMcPath();
   }, []);
   return (
     <>
@@ -70,19 +76,30 @@ export default function Home() {
           >
             更新数据
           </Button>
+        </Form.Item>
+        <Form.Item label={null}>
           <Button
-            className="up-btn"
             onClick={upDataGachaData}
-            icon={<SyncOutlined />}
+            icon={<VerticalAlignTopOutlined />}
             type="primary"
           >
             导出Excel
           </Button>
         </Form.Item>
+        <Form.Item className="select-file-btn" label={null}>
+          <Button
+            onClick={() => navgiate("/find-mc?showMessage=no")}
+            icon={<SelectOutlined />}
+            type="default"
+          >
+            手动选择安装位置
+          </Button>
+          <Button type="text" shape="circle" icon={<SettingOutlined />} />
+        </Form.Item>
       </Form>
       <div className="echarts">
-        {gachaData.map((item, index) => (
-          <MyEchart key={index} type={index+1} data={item}></MyEchart>
+        {gachaData.map((item, index: any) => (
+          item.length ? <MyEchart key={index} type={index + 1} data={item}></MyEchart> : <span key={index}></span>
         ))}
       </div>
     </>

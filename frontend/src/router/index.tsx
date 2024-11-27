@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import loadable from '@loadable/component';
 const Home = loadable(() => import('@/views/Home'))
 const FindMc = loadable(() => import('@/views/FindMc'))
+const Setting = loadable(() => import('@/views/Setting'))
 
 const router = createBrowserRouter([
     {
@@ -11,6 +12,10 @@ const router = createBrowserRouter([
     {
         path: '/find-mc',
         element: <FindMc></FindMc>,
+    },
+    {
+        path: '/setting',
+        element: <Setting></Setting>,
     },
 
 ])
