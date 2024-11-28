@@ -35,33 +35,28 @@ async function getMcPostion() {
     if (fs.existsSync(path.join(USER_DATA_PATH, 'InstallPath'))) return
     const data = await getInstalledApps()
     const mc = data.find(item => item.appName.includes("鸣潮"))
-    if (!mc) return null
+    if (!mc) return "未找到安装目录呢，手动选择一下安装目录吧"
     setMcPath(mc.InstallPath)
     return
 }
-/** 参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
+/** 得到网络地址，参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
 async function getUidParams() {
-    await getMcPostion()
-    if (!fs.existsSync(USER_DATA_PATH)) return {
-        code: 1,
-        data: "安装路径错误，请手动选择安装路径"
+    const posError = await getMcPostion()
+    if (posError) return {
+        code: 3,
+        data: posError
     }
-    const mcInitPath = fs.readFileSync(path.join(USER_DATA_PATH, 'InstallPath'), 'utf-8')
-    // const mcInitPath = await getMcPostion()
-    if (!mcInitPath) return {
-        code: 1,
-        data: "安装路径错误，请手动选择安装路径"
-    }
-
-    let mcPath = path.resolve(mcInitPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
+    const mcInstallPath = fs.readFileSync(path.join(USER_DATA_PATH, 'InstallPath'), 'utf-8')
+    let mcLogPath = path.resolve(mcInstallPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
     let text
     try {
-        text = fs.readFileSync(mcPath, "utf-8")
+        text = fs.readFileSync(mcLogPath, "utf-8")
     }
     catch {
+        fs.unlinkSync(path.join(USER_DATA_PATH, 'InstallPath'))
         return {
             code: 1,
-            data: "安装路径错误，请手动选择安装路径"
+            data: "文件数据错误，请勿手动去本地修改文件！！！"
         }
     }
     const mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
@@ -128,7 +123,9 @@ const getMcData = async (cardPoolType = 1) => {
             /** 尝试合并数据 */
             resData = mergeData(JSON.parse(fileData), res.data.data)
         }
-        catch (err) { }
+        catch (err) {
+            resData = res.data.data
+        }
     }
     else resData = mergeData([], res.data.data)
 

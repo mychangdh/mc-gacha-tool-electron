@@ -17,21 +17,22 @@ export default function Home() {
   const [gachaData, setGachaData] = useState<any[]>([]);
   const [uidList, setUidList] = useState([]);
   const [uid, setUid] = useState<string>("");
-  // 效验路径
+
+  // 效验本地路径是否合法
   async function efficacyMcPath() {
     const res = await ipc.invoke("getUidParams");
     if (res.code === 1) {
-      // navgiate("/find-mc", { replace: false });
-      return messageApi.error(res.data);
+      messageApi.error(res.data);
+      return false
     }
     if (res.code === 2) {
-      return messageApi.error(res.data);
+      messageApi.error(res.data);
+      return false
     }
-    if (res.code === 100000) {
-    }
+    return true
   }
 
-  /*尝试得到本地数据 */
+  /*尝试得到本地UID和本地数据 */
   async function getLocalData() {
     const urls = await ipc.invoke("getUrlList");
     setUidList(urls);
@@ -40,15 +41,15 @@ export default function Home() {
     setGachaData(Object.values(data));
   }
 
-  function onUidChange(selectUid: string) {
-    setUid(selectUid);
-  }
   async function exportGachaData() {
     const res = await ipc.invoke("exportGachaData", gachaData);
     if (res.code === 100000) {
-      message.success(`导出成功，路径为${res.path}`, 3000);
+      await message.success(`导出成功，路径为${res.path}`)
+      await ipc.invoke("openFile", res.path)
+
     }
   }
+  // 更新数据
   async function upDateGachaData() {
     const res = await ipc.invoke("updateAllGachaByType");
     if (res.code !== 100000) {
@@ -59,8 +60,8 @@ export default function Home() {
     message.success("更新成功！");
   }
   useEffect(() => {
-    getLocalData();
     efficacyMcPath();
+    getLocalData();
   }, []);
   return (
     <>
@@ -70,7 +71,7 @@ export default function Home() {
           <Select
             style={{ width: 220 }}
             value={uid}
-            onChange={onUidChange}
+            onChange={setUid}
             options={uidList.map((item) => ({
               value: item,
               id: item,
@@ -112,7 +113,7 @@ export default function Home() {
           item.length ? (
             <MyEchart key={index} type={index + 1} data={item}></MyEchart>
           ) : (
-            <span key={index}></span>
+            <div key={index}></div>
           )
         )}
       </div>
