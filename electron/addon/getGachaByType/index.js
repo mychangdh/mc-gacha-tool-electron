@@ -2,7 +2,7 @@ const { ipcMain } = require("electron/main")
 const { getInstalledApps } = require("get-installed-apps")
 const path = require("path")
 const fs = require("fs")
-const { USER_DATA_PATH } = require("../../../config")
+const { USER_DATA_PATH } = require("../../config")
 const axios = require("axios")
 const { writeData } = require("./writeData")
 const { readData } = require("./readData")
@@ -49,6 +49,7 @@ async function getUidParams() {
     const mcInstallPath = fs.readFileSync(path.join(USER_DATA_PATH, 'InstallPath'), 'utf-8')
     let mcLogPath = path.resolve(mcInstallPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
     let text
+    let mcurl
     try {
         text = fs.readFileSync(mcLogPath, "utf-8")
     }
@@ -59,7 +60,15 @@ async function getUidParams() {
             data: "文件数据错误，请勿手动去本地修改文件！！！"
         }
     }
-    const mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
+    try {
+        mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
+    }
+    catch {
+        return {
+            code: 100000,
+            data: "不需要理会的问题，打开抽卡链接可解决"
+        }
+    }
     const mcParams = getSearchParams(mcurl)
     setUidList(mcParams.player_id)
     return {
@@ -176,9 +185,12 @@ function create() {
             code: 1,
             data: "安装路径错误，请手动选择安装路径"
         }
+        let requiredNone = true
         const data = {}
         for (let i = 1; i <= 5; i++) {
             const file = readData(uid, i)
+            
+            if (file) requiredNone = false
             try {
                 if (file) data[`CardType_${i}`] = JSON.parse(file)
                 else data[`CardType_${i}`] = []
@@ -187,7 +199,10 @@ function create() {
                 data[`CardType_${i}`] = []
             }
         }
-        return data
+        return {
+            ...data,
+            requiredNone
+        }
     })
 
 }

@@ -38,7 +38,8 @@ export default function Home() {
     setUidList(urls);
     if (urls.length) setUid(urls[0]);
     const data = await ipc.invoke("getOldAllGachaByType");
-    setGachaData(Object.values(data));
+    if(data.requiredNone)  return upDateGachaData()
+    setGachaData(Object.values(data).slice(0,4));
   }
 
   async function exportGachaData() {

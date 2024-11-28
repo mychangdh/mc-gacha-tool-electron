@@ -1,18 +1,12 @@
 {
-  "productName": "ee",
-  "appId": "com.electron.ee",
-  "copyright": "© 2023 哆啦好梦 Technology Co., Ltd.",
+  "productName": "鸣潮抽卡分析工具",
+  "appId": "",
+  "copyright": "",
   "directories": {
     "output": "out"
   },
   "asar": true,
-  "files": [
-    "**/*",
-    "!frontend/",
-    "!run/",
-    "!logs/",
-    "!data/"
-  ],
+  "files": ["**/*", "!frontend/", "!run/", "!logs/", "!data/"],
   "extraResources": {
     "from": "build/extraResources/",
     "to": "extraResources"
@@ -26,12 +20,12 @@
     "installerHeaderIcon": "build/icons/icon.ico",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "EE框架"
+    "shortcutName": ""
   },
   "publish": [
     {
       "provider": "generic",
-      "url": "https://github.com/wallace5303/electron-egg"
+      "url": ""
     }
   ],
   "mac": {
@@ -52,9 +46,7 @@
   "linux": {
     "icon": "build/icons/icon.icns",
     "artifactName": "${productName}-${os}-${version}-${arch}.${ext}",
-    "target": [
-      "deb"
-    ],
+    "target": ["deb"],
     "category": "Utility"
   }
 }

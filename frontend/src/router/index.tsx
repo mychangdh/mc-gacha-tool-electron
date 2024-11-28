@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import loadable from '@loadable/component';
 const Home = loadable(() => import('@/views/Home'))
 const FindMc = loadable(() => import('@/views/FindMc'))
 const Setting = loadable(() => import('@/views/Setting'))
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: '/',
         element: <Home />

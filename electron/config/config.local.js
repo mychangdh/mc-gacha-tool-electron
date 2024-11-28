@@ -22,7 +22,7 @@ module.exports = (appInfo) => {
    * jobs
    */
   config.jobs = {
-    messageLog: true
+    messageLog: false
   };   
 
   return {

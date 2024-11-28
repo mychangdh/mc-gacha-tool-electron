@@ -68,7 +68,7 @@ export default function MyEchart({
           </div>
           <div
             className="average"
-            style={{ color: "#eab748", marginTop: "5px" }}
+            style={{ color: "#eab748", marginTop: "10px" }}
           >
             5星：<span className="length">{goldObj.gold.length} </span>
             <span className="percentage">[{getPercentage("gold")}]</span>
@@ -79,7 +79,7 @@ export default function MyEchart({
           </div>
           <div
             className="average"
-            style={{ color: "#3b82f6", marginBottom: "5px" }}
+            style={{ color: "#3b82f6", marginBottom: "10px" }}
           >
             3星：<span className="length">{goldObj.blue.length} </span>
             <span className="percentage">[{getPercentage("blue")}]</span>

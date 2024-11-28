@@ -23,11 +23,13 @@ module.exports = (appInfo) => {
    * 主窗口
    */
   config.windowsOption = {
-    title: 'EE框架',
+    title: '鸣潮抽卡分析工具',
     width: 900,
-    height: 550,
+    height: 540,
     minWidth: 400,
     minHeight: 300,
+    frame: false,
+    resizable: false,
     webPreferences: {
       //webSecurity: false,
       contextIsolation: false, // false -> 可在渲染进程中使用electron的api，true->需要bridge.js(contextBridge)
@@ -36,7 +38,7 @@ module.exports = (appInfo) => {
     },
     frame: true,
     show: false,
-    icon: path.join(appInfo.home, 'public', 'images', 'logo-32.png'),
+    icon: path.join(appInfo.home, 'public', 'images', 'logo.png'),
   };
 
   /**
@@ -137,7 +139,7 @@ module.exports = (appInfo) => {
    * jobs
    */
   config.jobs = {
-    messageLog: true
+    messageLog: false
   };
 
   /**
@@ -148,9 +150,7 @@ module.exports = (appInfo) => {
       enable: true,
     },
     tray: {
-      enable: true,
-      title: 'EE程序',
-      icon: '/public/images/tray.png'
+      enable: false,
     },
     security: {
       enable: true,
@@ -161,15 +161,7 @@ module.exports = (appInfo) => {
       args: []
     },
     autoUpdater: {
-      enable: true,
-      windows: false,
-      macOS: false,
-      linux: false,
-      options: {
-        provider: 'generic',
-        url: 'http://kodo.qiniu.com/'
-      },
-      force: false,
+      enable: false,
     }
   };
 
