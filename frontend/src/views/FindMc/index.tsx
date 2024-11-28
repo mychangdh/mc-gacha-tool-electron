@@ -35,7 +35,7 @@ export default function FinMc() {
         footer={[]}
         width="60%"
         maskClosable={false}
-        className="findMc no-select"
+        className="FindMc no-select"
       >
         <div className="mesage"> {showMessage === "no" ? "" : "没有找到鸣潮安装目录或者安装目录错误呢，请手动选择一下吧"}</div>
         <div className="tip">注意：选择名字叫做 <span>Wuthering Waves</span> 的目录！</div>
