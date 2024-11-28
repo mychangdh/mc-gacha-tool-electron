@@ -75,8 +75,9 @@ export default function Home() {
   async function setUidData(uid: string) {
     setUid(uid);
     const res = await getLocalData(uid);
-    console.log(res, 24234);
   }
+  const showSelectUid = localStorage.getItem("showSelectUid");
+
   useEffect(() => {
     efficacyMcPath();
     getLocalData();
@@ -108,7 +109,11 @@ export default function Home() {
             导出Excel
           </Button>
         </Form.Item>
-        <Form.Item className="select-file-btn" label={null}>
+        <Form.Item
+          style={{ visibility: `${showSelectUid ? "visible" : "hidden"}` }}
+          className="select-file-btn"
+          label={null}
+        >
           <Select
             style={{ width: 220 }}
             value={uid}

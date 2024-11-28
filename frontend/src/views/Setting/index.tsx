@@ -5,6 +5,8 @@ import { ipc } from "@/utils/ipcRender";
 import { FloatButton } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { Switch } from "antd";
+
 export default function Setting() {
   const [installPath, setInstallPath] = useState("");
   const [gachaPath, setGachaPath] = useState("");
@@ -28,6 +30,14 @@ export default function Setting() {
   function closePage() {
     navigate("/");
   }
+
+  const [showSelectUid, setShowSelectUid] = useState(
+    Boolean(localStorage.getItem("showSelectUid"))
+  );
+  function switchChange(val: boolean) {
+    setShowSelectUid(val);
+    localStorage.setItem("showSelectUid", val ? "true" : "");
+  }
   return (
     <div className="Setting">
       <FloatButton icon={<CloseOutlined />} onClick={closePage} />
@@ -42,6 +52,12 @@ export default function Setting() {
             <Select style={{ width: "200px" }} defaultValue="jtzw">
               <Select.Option value="jtzw">简体中文</Select.Option>
             </Select>
+          </Form.Item>
+          <Form.Item
+            label="UID可选"
+            extra="由于本人只有一个账号，该功能并未做测试，慎用"
+          >
+            <Switch checked={Boolean(showSelectUid)} onChange={switchChange} />
           </Form.Item>
           <Form.Item label="游戏安装目录">{installPath}</Form.Item>
           <Form.Item
