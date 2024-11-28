@@ -34,12 +34,13 @@ async function exportGachaData(e, data) {
         })
     })
     const buffer = xlsx.build(arr);
-    
+
     fs.writeFileSync(filePath, buffer);
     return {
         code: 100000,
         data: "导出成功！",
-        path: filePath
+        path: filePath,
+        directory: path.join(filePath, '../')
     }
 }
 module.exports = {

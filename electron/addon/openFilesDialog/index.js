@@ -14,8 +14,8 @@ async function create() {
             });
         return result
     })
-    ipcMain.handle("openFile", async (e, path) => {
-        const result = await shell.openPath(path)
+    ipcMain.handle("openFile", (e, path) => {
+        const result = shell.showItemInFolder(path)
         return result
     })
     ipcMain.on("openBrowser", async (e, path) => {

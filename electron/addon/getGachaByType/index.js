@@ -182,7 +182,7 @@ function create() {
             data
         }
     })
-    ipcMain.handle("getOldAllGachaByType", async (thisUid) => {
+    ipcMain.handle("getOldAllGachaByType", async (e,thisUid) => {
         const urlList = await getUidParams()
         const uid = thisUid || urlList?.params?.player_id || getUidList()[0]
         if (!uid) return {
