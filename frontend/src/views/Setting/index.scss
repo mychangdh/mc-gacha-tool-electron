@@ -31,9 +31,12 @@
         color: #ccc;
         width: 600px;
         margin-left: 150px;
-        a {
+
+        span {
+            cursor: pointer;
             color: #000;
             margin: 0 5px;
+            text-decoration: underline;
         }
     }
     .link {

@@ -80,9 +80,13 @@ export default function Setting() {
       <div className="about-value">
         <div className="link">
           蓝奏云：
-          <a href="https://wwyl.lanzouv.com/b00mox71rg" target="_blank">
+          <span
+            onClick={() =>
+              ipc.send("openBrowser", "https://wwyl.lanzouv.com/b00mox71rg")
+            }
+          >
             https://wwyl.lanzouv.com/b00mox71rg
-          </a>
+          </span>
           密码:1234。
         </div>
         <div>本软件使用electron + react框架。</div>

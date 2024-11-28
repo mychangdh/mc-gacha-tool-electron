@@ -18,6 +18,9 @@ async function create() {
         const result = await shell.openPath(path)
         return result
     })
+    ipcMain.on("openBrowser", async (e, path) => {
+        shell.openExternal(path)
+    })
 
 }
 module.exports = {
