@@ -74,7 +74,7 @@ export default function Home() {
   }
   async function setUidData(uid: string) {
     setUid(uid);
-    const res = await getLocalData(uid);
+    await getLocalData(uid);
   }
   const showSelectUid = localStorage.getItem("showSelectUid");
 

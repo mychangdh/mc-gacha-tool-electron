@@ -34,12 +34,11 @@ function setMcPath(url) {
 
 /** 效验是否存在路径 */
 async function efficacyMcPath() {
-
     if (fs.existsSync(mcInstallFilePath)) return
     const data = await getInstalledApps()
     const mc = data.find(item => item.appName.includes("鸣潮"))
     if (!mc) return "未找到安装目录呢，手动选择一下安装目录吧"
-    setMcPath(mc.InstallPath)
+    setMcPath(mc.InstallPath || mc.InstallLocation)
     return
 }
 /** 得到网络地址，参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
@@ -128,7 +127,7 @@ const getMcData = async (cardPoolType = 1) => {
 
     if (res.data.code !== 0) return {
         code: 2,
-        data: "网络错误或链接已过期,请重新打开抽卡界面后再刷新"
+        data: "网络错误或链接已过期,请重新打开抽卡界面后再点击更新数据"
     }
     const fileData = readData(String(mcParams.player_id), cardPoolType)
     let resData
