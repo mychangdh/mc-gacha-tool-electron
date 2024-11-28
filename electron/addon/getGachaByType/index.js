@@ -9,6 +9,7 @@ const { readData } = require("./readData")
 const { mergeData } = require("./mergeData")
 const { forEach } = require("lodash")
 const { exportGachaData } = require("./exportGachaData")
+const mcInstallFilePath = path.join(USER_DATA_PATH, 'InstallPath')
 const getSearchParams = (url) => {
     // 获取查询参数前的 ? 对应的索引位置
     const searchIndex = url.indexOf('?')
@@ -27,12 +28,14 @@ const getSearchParams = (url) => {
 
 function setMcPath(url) {
     if (!fs.existsSync(USER_DATA_PATH)) fs.mkdirSync(USER_DATA_PATH);
-    fs.writeFileSync(path.join(USER_DATA_PATH, 'InstallPath'), url)
+    fs.writeFileSync(mcInstallFilePath, url)
     return
 }
 
-async function getMcPostion() {
-    if (fs.existsSync(path.join(USER_DATA_PATH, 'InstallPath'))) return
+/** 效验是否存在路径 */
+async function efficacyMcPath() {
+
+    if (fs.existsSync(mcInstallFilePath)) return
     const data = await getInstalledApps()
     const mc = data.find(item => item.appName.includes("鸣潮"))
     if (!mc) return "未找到安装目录呢，手动选择一下安装目录吧"
@@ -41,12 +44,12 @@ async function getMcPostion() {
 }
 /** 得到网络地址，参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
 async function getUidParams() {
-    const posError = await getMcPostion()
-    if (posError) return {
+    const pathError = await efficacyMcPath()
+    if (pathError) return {
         code: 3,
         data: posError
     }
-    const mcInstallPath = fs.readFileSync(path.join(USER_DATA_PATH, 'InstallPath'), 'utf-8')
+    const mcInstallPath = fs.readFileSync(mcInstallFilePath, 'utf-8')
     let mcLogPath = path.resolve(mcInstallPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
     let text
     let mcurl
@@ -54,7 +57,7 @@ async function getUidParams() {
         text = fs.readFileSync(mcLogPath, "utf-8")
     }
     catch {
-        fs.unlinkSync(path.join(USER_DATA_PATH, 'InstallPath'))
+        fs.unlinkSync(mcInstallFilePath)
         return {
             code: 1,
             data: "文件数据错误，请勿手动去本地修改文件！！！"
@@ -66,14 +69,16 @@ async function getUidParams() {
     catch {
         return {
             code: 100000,
-            data: "不需要理会的问题，打开抽卡链接可解决"
+            data: "不需要理会的问题，打开抽卡界面可解决"
         }
     }
     const mcParams = getSearchParams(mcurl)
     setUidList(mcParams.player_id)
+    const gachaUrlPath = path.join(USER_DATA_PATH, './userUrlPath')
+    fs.writeFileSync(gachaUrlPath, mcurl, "utf-8")
     return {
         code: 100000,
-        params: mcParams
+        params: mcParams,
     }
 }
 function getUidList() {
@@ -150,7 +155,7 @@ const getMcData = async (cardPoolType = 1) => {
 
 
 function create() {
-    ipcMain.handle("getMcPostion", getMcPostion)
+    ipcMain.handle("efficacyMcPath", efficacyMcPath)
     ipcMain.on("setMcPostion", (e, path) => {
         setMcPath(path)
     })
@@ -178,9 +183,9 @@ function create() {
             data
         }
     })
-    ipcMain.handle("getOldAllGachaByType", async () => {
+    ipcMain.handle("getOldAllGachaByType", async (thisUid) => {
         const urlList = await getUidParams()
-        const uid = urlList?.params?.player_id || getUidList()[0]
+        const uid = thisUid || urlList?.params?.player_id || getUidList()[0]
         if (!uid) return {
             code: 1,
             data: "安装路径错误，请手动选择安装路径"
@@ -189,7 +194,7 @@ function create() {
         const data = {}
         for (let i = 1; i <= 5; i++) {
             const file = readData(uid, i)
-            
+
             if (file) requiredNone = false
             try {
                 if (file) data[`CardType_${i}`] = JSON.parse(file)
@@ -204,7 +209,14 @@ function create() {
             requiredNone
         }
     })
-
+    ipcMain.handle("getInstallPath", () => {
+        if (!fs.existsSync(mcInstallFilePath)) return ""
+        return fs.readFileSync(mcInstallFilePath, "utf-8")
+    })
+    ipcMain.handle("getGachaPath", () => {
+        if (!fs.existsSync(path.join(USER_DATA_PATH, 'userUrlPath'))) return ""
+        return fs.readFileSync(path.join(USER_DATA_PATH, 'userUrlPath'), "utf-8")
+    })
 }
 module.exports = {
     create

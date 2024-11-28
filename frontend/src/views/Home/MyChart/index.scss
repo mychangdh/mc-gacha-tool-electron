@@ -1,4 +1,4 @@
-.MyChart{
+.MyChart {
     width: 250px;
     margin: 10px;
     .cramp {
@@ -7,7 +7,7 @@
         margin-top: 10px;
         .cramp-item {
             white-space: nowrap;
-           
+
             .count {
                 margin-right: 7px;
             }
@@ -33,9 +33,9 @@
     .title {
         font-size: 14px;
         font-weight: 700;
-        margin-bottom: 5px;
+        margin-bottom: 15px;
     }
-  
+
     .message {
         width: 200px;
         font-size: 12px;
@@ -43,5 +43,4 @@
             color: #6b7280;
         }
     }
-    
 }

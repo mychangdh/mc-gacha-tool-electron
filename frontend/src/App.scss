@@ -1,5 +1,41 @@
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-    background-color: #F5F5F5;
-    }
+    background-color: #f5f5f5;
+}
+// 页面切换过渡动画
+.page {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+}
+
+// 页面切换过渡动画 --- 进入
+.page-enter {
+    opacity: 0;
+    transform: scale(11.1);
+}
+
+// 页面切换过渡动画 --- 进入（被激活）
+.page-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+        opacity 300ms,
+        transform 300ms;
+}
+
+// 页面切换过渡动画 --- 离开
+.page-exit {
+    opacity: 1;
+    transform: scale(1);
+}
+
+// 页面切换过渡动画 --- 离开（被激活）
+.page-exit-active {
+    opacity: 0;
+    transform: scale(0.09);
+    transition:
+        opacity 300ms,
+        transform 300ms;
+}

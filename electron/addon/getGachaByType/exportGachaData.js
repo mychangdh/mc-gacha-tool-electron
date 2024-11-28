@@ -12,9 +12,12 @@ const cardType = {
     4: "角色调谐（新手池）",
 }
 async function exportGachaData(e, data) {
-    const { canceled, filePaths } = await dialog.showOpenDialog({
+    const dataName = `抽卡数据${dayjs().format("YYYY年MM月DD分HH时mm分ss秒")}`
+    const { canceled, filePath } = await dialog.showSaveDialog({
         title: "请选择导出目录",
-        properties: ['openDirectory']
+        defaultPath: `${dataName}.xlsx`,
+        filters: [{ name: 'Custom File Type', extensions: ['xlsx', 'xls'] }],
+        properties: ['openFile']
     })
     if (canceled) return {
         code: 1,
@@ -31,8 +34,8 @@ async function exportGachaData(e, data) {
         })
     })
     const buffer = xlsx.build(arr);
-    const myPath = path.join(filePaths[0], `./抽卡数据${dayjs().format("YYYY年MM月DD分HH时mm分ss秒")}.xlsx`)
-    fs.writeFileSync(myPath, buffer);
+    
+    fs.writeFileSync(filePath, buffer);
     return {
         code: 100000,
         data: "导出成功！",

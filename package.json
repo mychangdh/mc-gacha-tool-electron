@@ -1,7 +1,7 @@
 {
   "name": "mc_gacha_tool",
-  "version": "3.14.0",
-  "description": "A fast, desktop software development framework",
+  "version": "1.0.0",
+  "description": "这是一个鸣潮抽卡分析工具，写着玩的",
   "main": "main.js",
   "scripts": {
     "dev": "chcp 65001 &&  ee-bin dev",
@@ -39,7 +39,7 @@
   "keywords": [
     "Electron"
   ],
-  "author": "常东辉, Inc <1392238525@qq.com>",
+  "author": "常东辉, <1392238525@qq.com>",
   "license": "Apache",
   "devDependencies": {
     "@electron/rebuild": "^3.2.13",

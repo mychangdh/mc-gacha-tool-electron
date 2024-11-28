@@ -13,5 +13,7 @@ module.exports = async () => {
   Addon.get('security').create();
   Addon.get('getGachaByType').create();
   Addon.get('openFilesDialog').create();
+  Addon.get('clipboardTool').create();
+  Addon.get('getConfig').create();
 
 }
