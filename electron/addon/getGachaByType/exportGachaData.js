@@ -39,7 +39,7 @@ async function exportGachaData(e, data) {
     return {
         code: 100000,
         data: "导出成功！",
-        path: myPath
+        path: filePath
     }
 }
 module.exports = {
