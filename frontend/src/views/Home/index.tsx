@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 // import { useState } from "react";
 import { ipc } from "@/utils/ipcRender";
 import {
-  SelectOutlined,
   SettingOutlined,
   SyncOutlined,
   VerticalAlignTopOutlined,
