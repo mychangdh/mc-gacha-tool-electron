@@ -134,20 +134,26 @@ const getMcData = async (cardPoolType = 1) => {
 
     if (urlList.code !== 100000) return urlList
     const mcParams = urlList.params
-
     const res = await axios({
         url: `https://gmserver-api.aki-game2.${String(mcParams.player_id)[0] === "1" ? "com" : "net"}/gacha/record/query`,
         method: "post",
         data: {
             cardPoolId: mcParams.resources_id,
+            languageCode: "zh-Hans",
             playerId: mcParams.player_id,
             recordId: mcParams.record_id,
             serverId: mcParams.svr_id,
             cardPoolType: cardPoolType
         },
         headers: {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
-            "Content-Type": "application/json;text/plain;*/*"
+            "accept-language": "zh-Hans",
+            "Content-Type": "application/json;charset=UTF-8",
+            "sec-ch-ua": `"Microsoft Edge";v="129", "Not=A?Brand";v="8", "Chromium";v="129"`,
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "Windows",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site"
         }
     })
 
