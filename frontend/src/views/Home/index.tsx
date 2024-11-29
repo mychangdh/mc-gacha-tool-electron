@@ -41,14 +41,12 @@ export default function Home() {
     const data = await ipc.invoke("getOldAllGachaByType", uid).catch(() => {
       setLoading(false);
     });
-    console.log(data,235435);
     if (data.requiredNone) {
       setLoading(false);
       upDateGachaData();
       return;
     }
-   
-    
+
     setGachaData(Object.values(data).slice(0, 4));
     setLoading(false);
   }
@@ -128,13 +126,6 @@ export default function Home() {
           />
         </Form.Item>
         <Form.Item label={null}>
-          <Button
-            onClick={() => navgiate("/find-mc?showMessage=no")}
-            icon={<SelectOutlined />}
-            type="default"
-          >
-            手动选择安装位置
-          </Button>
           <Button
             type="text"
             shape="circle"

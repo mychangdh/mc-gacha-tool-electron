@@ -7,7 +7,7 @@ export default function MyEchart({
   type,
   data,
 }: {
-  type: 1 | 2 | 3 | 4 | 5;
+  type: 1 | 2 | 3 | 4 | 5
   data: CardType[];
 }) {
   const chartRef = useRef(null);

@@ -1,6 +1,7 @@
 const { ipcMain } = require("electron/main")
 const { getInstalledApps } = require("get-installed-apps")
 const path = require("path")
+const { app } = require("electron")
 const fs = require("fs")
 const { USER_DATA_PATH } = require("../../config")
 const axios = require("axios")
@@ -37,8 +38,21 @@ async function efficacyMcPath() {
     if (fs.existsSync(mcInstallFilePath)) return
     const data = await getInstalledApps()
     const mc = data.find(item => item.appName.includes("鸣潮"))
-    if (!mc) return "未找到安装目录呢，手动选择一下安装目录吧"
-    setMcPath(mc.InstallPath || mc.InstallLocation)
+    let mcInstallPath
+    if (!mc) {
+        const home = app.getPath("home")
+        const mcInstallLogPath = path.join(home, "./AppData/Roaming/KRLauncher/G152/C10003/kr_starter_game.json")
+        try {
+            const mcInstallPathData = fs.readFileSync(mcInstallLogPath, "utf-8")
+            mcInstallPath = path.join(JSON.parse(mcInstallPathData).path, "../")
+        }
+        catch (err) {
+            console.log(err);
+            return "未找到安装目录呢，点击右上角设置手动选择一下安装目录吧"
+        }
+
+    }
+    setMcPath(mc?.InstallPath || mc?.InstallLocation || mcInstallPath)
     return
 }
 /** 得到网络地址，参数 1:up角色,2:up武器,3:常驻角色, 4:武器常驻,5:新手卡池 */
@@ -46,7 +60,7 @@ async function getUidParams() {
     const pathError = await efficacyMcPath()
     if (pathError) return {
         code: 3,
-        data: posError
+        data: pathError
     }
     const mcInstallPath = fs.readFileSync(mcInstallFilePath, 'utf-8')
     let mcLogPath = path.resolve(mcInstallPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
@@ -59,7 +73,7 @@ async function getUidParams() {
         fs.unlinkSync(mcInstallFilePath)
         return {
             code: 1,
-            data: "文件数据错误，请勿手动去本地修改文件！！！"
+            data: "并没有找到现在的安装路径，手动选择一下吧"
         }
     }
     try {
@@ -182,7 +196,7 @@ function create() {
             data
         }
     })
-    ipcMain.handle("getOldAllGachaByType", async (e,thisUid) => {
+    ipcMain.handle("getOldAllGachaByType", async (e, thisUid) => {
         const urlList = await getUidParams()
         const uid = thisUid || urlList?.params?.player_id || getUidList()[0]
         if (!uid) return {

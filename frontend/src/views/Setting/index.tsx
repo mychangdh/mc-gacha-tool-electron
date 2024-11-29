@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./index.scss";
-import { Form, message, Select } from "antd";
+import { Button, Form, message, Select } from "antd";
 import { ipc } from "@/utils/ipcRender";
 import { FloatButton } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, SelectOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Switch } from "antd";
 
@@ -59,7 +59,17 @@ export default function Setting() {
           >
             <Switch checked={Boolean(showSelectUid)} onChange={switchChange} />
           </Form.Item>
-          <Form.Item label="游戏安装目录">{installPath}</Form.Item>
+          <Form.Item label="游戏安装目录">
+            {installPath}
+            <Button
+            className="install-select-btn"
+              onClick={() => navigate("/find-mc?showMessage=no")}
+              icon={<SelectOutlined />}
+              type="default"
+            >
+              手动选择安装位置
+            </Button>
+          </Form.Item>
           <Form.Item
             className="url"
             label="上一次抽卡链接"
