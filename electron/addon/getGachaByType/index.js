@@ -38,13 +38,14 @@ async function efficacyMcPath() {
     if (fs.existsSync(mcInstallFilePath)) return
     const data = await getInstalledApps()
     const mc = data.find(item => item.appName.includes("鸣潮"))
+
     let mcInstallPath
     if (!mc) {
         const home = app.getPath("home")
         const mcInstallLogPath = path.join(home, "./AppData/Roaming/KRLauncher/G152/C10003/kr_starter_game.json")
         try {
             const mcInstallPathData = fs.readFileSync(mcInstallLogPath, "utf-8")
-            mcInstallPath = path.join(JSON.parse(mcInstallPathData).path, "../")
+            mcInstallPath = path.join(JSON.parse(mcInstallPathData).path, "./")
         }
         catch (err) {
             console.log(err);
@@ -81,7 +82,13 @@ async function getUidParams() {
     }
     catch {
         return {
-            code: 100000,
+            code: 1,
+            data: "不需要理会的问题，打开抽卡界面可解决"
+        }
+    }
+    if (!mcurl) {
+        return {
+            code: 1,
             data: "不需要理会的问题，打开抽卡界面可解决"
         }
     }
@@ -120,8 +127,11 @@ function setUidList(uid) {
 }
 const getMcData = async (cardPoolType = 1) => {
     const urlList = await getUidParams()
+
     if (urlList.code !== 100000) return urlList
     const mcParams = urlList.params
+
+
     const res = await axios({
         url: "https://gmserver-api.aki-game2.com/gacha/record/query",
         method: "post",
