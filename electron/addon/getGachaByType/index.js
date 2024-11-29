@@ -65,18 +65,21 @@ async function getUidParams() {
     }
     const mcInstallPath = fs.readFileSync(mcInstallFilePath, 'utf-8')
     let mcLogPath = path.resolve(mcInstallPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
-    let text
-    let mcurl
-    try {
-        text = fs.readFileSync(mcLogPath, "utf-8")
-    }
-    catch {
+    let weGameMcLogPath = path.resolve(mcInstallPath, "./Client/Saved/Logs/Client.log")
+    let pathEnd
+    if (fs.existsSync(mcInstallFilePath)) pathEnd = mcLogPath
+    else if (fs.existsSync(weGameMcLogPath)) pathEnd = weGameMcLogPath
+    else {
         fs.unlinkSync(mcInstallFilePath)
         return {
             code: 1,
             data: "并没有找到现在的安装路径，手动选择一下吧"
         }
     }
+    let text
+    let mcurl
+
+    text = fs.readFileSync(mcLogPath, "utf-8")
     try {
         mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
     }
@@ -86,6 +89,7 @@ async function getUidParams() {
             data: "不需要理会的问题，打开抽卡界面可解决"
         }
     }
+
     if (!mcurl) {
         return {
             code: 1,
@@ -131,13 +135,11 @@ const getMcData = async (cardPoolType = 1) => {
     if (urlList.code !== 100000) return urlList
     const mcParams = urlList.params
 
-
     const res = await axios({
-        url: "https://gmserver-api.aki-game2.com/gacha/record/query",
+        url: `https://gmserver-api.aki-game2.${String(mcParams.player_id)[0] === "1" ? "com" : "net"}/gacha/record/query`,
         method: "post",
         data: {
             cardPoolId: mcParams.resources_id,
-            languageCode: "zh-Hans",
             playerId: mcParams.player_id,
             recordId: mcParams.record_id,
             serverId: mcParams.svr_id,
