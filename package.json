@@ -39,7 +39,7 @@
   "keywords": [
     "Electron"
   ],
-  "author": "常东辉, <1392238525@qq.com>",
+  "author": "ChangDh, <1392238525@qq.com>",
   "license": "Apache",
   "devDependencies": {
     "@electron/rebuild": "^3.2.13",
