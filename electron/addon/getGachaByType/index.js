@@ -67,7 +67,7 @@ async function getUidParams() {
     let mcLogPath = path.resolve(mcInstallPath, "./Wuthering Waves Game/Client/Saved/Logs/Client.log")
     let weGameMcLogPath = path.resolve(mcInstallPath, "./Client/Saved/Logs/Client.log")
     let pathEnd
-    if (fs.existsSync(mcInstallFilePath)) pathEnd = mcLogPath
+    if (fs.existsSync(mcLogPath)) pathEnd = mcLogPath
     else if (fs.existsSync(weGameMcLogPath)) pathEnd = weGameMcLogPath
     else {
         fs.unlinkSync(mcInstallFilePath)
@@ -79,7 +79,7 @@ async function getUidParams() {
     let text
     let mcurl
 
-    text = fs.readFileSync(mcLogPath, "utf-8")
+    text = fs.readFileSync(pathEnd, "utf-8")
     try {
         mcurl = text.match(/"https:\/\/aki-gm-resources.aki-game.com\/[\s\S]*?"/)[0].replace(/"/g, "")
     }
