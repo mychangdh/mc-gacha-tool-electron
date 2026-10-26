@@ -35,9 +35,7 @@
 
 前往 [Releases](../../releases) 页面下载最新版本：
 
-- **Windows x64**: `mc-gacha-tool-Setup-{version}.exe`
-- **Windows ARM64**: `mc-gacha-tool-Setup-{version}-arm64.exe`
-- **便携版**: `mc-gacha-tool-{version}.exe`（无需安装）
+
 
 ### 系统要求
 
