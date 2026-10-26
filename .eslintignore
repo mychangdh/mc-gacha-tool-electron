@@ -1,0 +1,29 @@
+# 依赖目录
+node_modules/
+frontend/node_modules/
+
+# 构建输出
+dist/
+build/
+out/
+public/electron/
+
+# 前端资源（前端有独立的 ESLint 配置）
+frontend/
+
+# 临时文件
+*.log
+*.tmp
+.DS_Store
+
+# 配置文件
+*.json
+*.yaml
+*.yml
+
+# 其他
+coverage/
+.vscode/
+.idea/
+*.swp
+*.swo

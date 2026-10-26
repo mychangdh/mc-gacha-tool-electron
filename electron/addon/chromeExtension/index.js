@@ -2,11 +2,9 @@ const { app, session } = require('electron');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
-const Log = require('ee-core/log');
 
 /**
  * 扩展插件 （electron自身对该功能并不完全支持，官方也不建议使用）
- * @class
  */
 class ChromeExtensionAddon {
 
@@ -17,7 +15,7 @@ class ChromeExtensionAddon {
    * 创建
    */
   async create () {
-    Log.info('[addon:chromeExtension] load');
+    console.log('[addon:chromeExtension] load');
 
     const extensionIds = this.getAllIds();
     for (let i = 0; i < extensionIds.length; i++) {
@@ -45,7 +43,7 @@ class ChromeExtensionAddon {
       variablePath = '..'; // 打包后路径
     }
     extensionDirPath = path.join(app.getAppPath(), variablePath, "extraResources", "chromeExtension");
-  
+
     return extensionDirPath;
   }
 
@@ -54,21 +52,21 @@ class ChromeExtensionAddon {
    */
   async load (extensionId = '') {
     if (_.isEmpty(extensionId)) {
-      return false
+      return false;
     }
-    
+
     try {
       const extensionPath = path.join(this.getDirectory(), extensionId);
-      Log.info('[addon:chromeExtension] extensionPath:', extensionPath);
+      console.log('[addon:chromeExtension] extensionPath:', extensionPath);
       await session.defaultSession.loadExtension(extensionPath, { allowFileAccess: true });
     } catch (e) {
-      Log.info('[addon:chromeExtension] load extension error extensionId:%s, errorInfo:%s', extensionId, e.toString());
-      return false
+      console.log('[addon:chromeExtension] load extension error extensionId:%s, errorInfo:%s', extensionId, e.toString());
+      return false;
     }
-  
-    return true
+
+    return true;
   }
-  
+
   /**
    * 获取目录下所有文件夹
    */
@@ -87,8 +85,8 @@ class ChromeExtensionAddon {
     });
 
     return components;
-  };
+  }
 }
 
-ChromeExtensionAddon.toString = () => '[class ChromeExtensionAddon]';
-module.exports = ChromeExtensionAddon;
+const chromeExtensionAddon = new ChromeExtensionAddon();
+module.exports = chromeExtensionAddon;
